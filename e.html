@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Jinni's Ultimate Eidi 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{  
+  margin:0;
+  font-family:Arial, sans-serif;
+  text-align:center;
+  overflow:hidden;
+  background:#111;
+  color:white;
+}
+
+/* LOGIN PAGE */
+#login{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:#333;
+}
+input{padding:10px; font-size:18px; margin-top:10px;}
+button{margin-top:10px; padding:10px 20px; font-size:18px; cursor:pointer;}
+
+/* MAIN PAGE */
+#main{
+  display:none;
+  min-height:100vh;
+  padding:20px;
+  color:white;
+  background:linear-gradient(135deg,#ff758c,#ff7eb3);
+  position:relative;
+  overflow:hidden;
+}
+
+/* Stars & moon */
+.stars{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:url('assets/star.png') repeat;
+  z-index:-1;
+  opacity:0.2;
+}
+.moon{
+  position:fixed;
+  top:30px;
+  right:30px;
+  width:80px;
+  z-index:-1;
+}
+
+/* Typing */
+#typing{font-size:28px;margin-top:40px;}
+
+/* Secret note */
+#secretNote{
+  margin-top:20px;
+  background:rgba(255,255,255,0.2);
+  padding:15px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:20px;
+  display:block;
+  transition:0.3s;
+}
+#secretNote:hover{background:rgba(255,255,255,0.35);}
+#flirtContent{
+  margin-top:20px;
+  font-size:22px;
+  color:#fff0f5;
+  min-height:60px;
+}
+
+/* Floating surprise options */
+.optionBtn{
+  position:absolute;
+  padding:12px 15px;
+  font-size:16px;
+  cursor:pointer;
+  border-radius:12px;
+  background:#ff85c0;
+  color:white;
+  border:none;
+  transition:0.3s;
+}
+.optionBtn:hover{
+  transform:scale(1.1);
+  background:#ff4d94;
+}
+
+#finalMessage{
+  margin-top:50px;
+  font-size:36px;
+  position:relative;
+}
+
+/* Hearts */
+.heart{
+  position:absolute;
+  pointer-events:none;
+  user-select:none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="login">
+<h1>Only for Jinni 💖</h1>
+<p>Enter Password</p>
+<input type="password" id="password">
+<button onclick="checkPassword()">Enter</button>
+</div>
+
+<div id="main">
+<div class="stars"></div>
+<img class="moon" src="assets/moon.png" alt="moon">
+
+<h1>Welcome Meri pyari Jinni 💖</h1>
+<p id="typing"></p>
+
+<div id="secretNote" onclick="showFlirtingLine()">Click here to read my special message 💌</div>
+<div id="flirtContent"></div>
+
+<div id="optionsContainer"></div>
+<div id="finalMessage"></div>
+
+<audio id="bgMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Typing welcome
+let typeIndex=0;
+let typeTextMessage="Meri Pyari Jinni… This is your special Eidi 💖";
+function typeWriter(){
+  if(typeIndex<typeTextMessage.length){
+    document.getElementById("typing").innerHTML+=typeTextMessage.charAt(typeIndex);
+    typeIndex++;
+    setTimeout(typeWriter,70);
+  }
+}
+
+// Password check
+function checkPassword(){
+  let pwd=document.getElementById("password").value;
+  if(pwd==="5137"){
+    document.getElementById("login").style.display="none";
+    document.getElementById("main").style.display="block";
+    document.getElementById("bgMusic").play();
+    smoothFlash();
+    typeWriter();
+    startHeartsLoop();
+  } else { alert("Wrong password!"); }
+}
+function smoothFlash(){
+  document.body.style.transition="background 0.3s";
+  document.body.style.background="white";
+  setTimeout(()=>{document.body.style.background="linear-gradient(135deg,#ff758c,#ff7eb3)";},300);
+}
+
+// Floating hearts
+const heartShapes = ["❤️","💖","💘","💝","💗","💓"];
+function createHeart(){
+  let h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = heartShapes[Math.floor(Math.random()*heartShapes.length)];
+  let size = 20 + Math.random()*30;
+  h.style.fontSize = size + "px";
+  h.style.left = Math.random() * window.innerWidth + "px";
+  h.style.top = window.innerHeight + "px";
+  document.body.appendChild(h);
+
+  let floatDuration = 5 + Math.random()*5;
+  let startLeft = parseFloat(h.style.left);
+  let startTime = null;
+  let swayAmplitude = 20 + Math.random()*30;
+
+  function animate(timestamp){
+    if(!startTime) startTime = timestamp;
+    let elapsed = (timestamp - startTime)/1000;
+    let progress = elapsed/floatDuration;
+    if(progress>1) progress=1;
+
+    h.style.top = window.innerHeight - (window.innerHeight + 50)*progress + "px";
+    h.style.left = startLeft + Math.sin(elapsed*2)*swayAmplitude + "px";
+    h.style.opacity = 1 - progress;
+
+    if(progress<1){
+      requestAnimationFrame(animate);
+    } else {
+      h.remove();
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function startHeartsLoop(){
+  setInterval(createHeart, 150); // lots of hearts
+}
+
+// Flirting lines (fixed comma)
+const flirtingLines=[
+  "Tum ho toh time ka pata hi nahi chalta, bas tumhare saath rehna hai ❤️",
+  "Jinni, tumhare smile se meri duniya complete hoti hai ✨❤️",
+  "Agar tum saath ho, toh har din meri Eid lagti hai 😘",
+  "Jinni, tum meri favourite notification ho 📱💕",
+  "Tumhari hasi mere dil ka Wi-Fi hai, full signal ❤️",
+  "Jinni, tumhe dekh ke lagta hai duniya sabse khoobsurat jagah hai 🌹",
+  "Tum meri life ka sweetest surprise ho 🎁💖",
+  "Tumhari aankhon me meri duniya basa hai 🌌",
+  "Jinni, tum meri heart beat ka favourite rhythm ho 💓",
+  "Tum mere dil ke VIP ho, entry sirf tumhare liye ❤️✨",
+  "I LOVE YOU MERI PYAR JINNI💖, MERI RASMALAI😋, MERA MOTTU BACHA😊, MERI CHANDUU DARLING 😘, MERA PYARA SA BHOOT👻"
+];
+let flirtIndex = 0;
+
+function showFlirtingLine() {
+  if (flirtIndex < flirtingLines.length) {
+    typeFlirt(flirtingLines[flirtIndex], () => {
+      createSingleOption(flirtIndex);
+      flirtIndex++;
+    });
+  }
+}
+
+function typeFlirt(text, callback){
+  const container=document.getElementById("flirtContent");
+  container.innerHTML="";
+  let i=0;
+  const interval=setInterval(()=>{
+    if(i<text.length){
+      container.innerHTML+=text.charAt(i);
+      i++;
+    }else{
+      clearInterval(interval);
+      createHeart();
+      setTimeout(callback,500);
+    }
+  },70);
+}
+
+// Smooth floating options
+const optionTexts=[
+  "Ek TIGHT HUG🫂","Ek KISS 😘","A LIP KISS LONG WALI💏","GODI LENA 🧑‍🤝‍🧑",
+  "All LECTURE BUNK 🏛️","SARA DIN BAITH KAR TUMARI BAATE SUNNA❤️❤️","TRUTH AND DARE😊😘","Bike RIDE🚴‍♀️",
+  "A BUS TRAVEL TOGETHER 🚏","A MOVIE DATE 📅😋","AND ANYTHING JO TUM KAHOO❤️😊"
+];
+
+let floatingButtons = [];
+
+function createSingleOption(idx){
+  const container=document.getElementById("optionsContainer");
+  if(idx < optionTexts.length){
+    let btn=document.createElement("button");
+    btn.className="optionBtn";
+    btn.innerText=optionTexts[idx];
+    btn.onclick=()=>chooseOption(optionTexts[idx]);
+    btn.style.left=Math.random()*70+"vw";
+    btn.style.top=Math.random()*50+"vh";
+    container.appendChild(btn);
+
+    floatingButtons.push({
+      el: btn,
+      dx: (Math.random()*0.2 + 0.1) * (Math.random()<0.5?-1:1),
+      dy: (Math.random()*0.2 + 0.1) * (Math.random()<0.5?-1:1)
+    });
+
+    showFlirtingLine();
+  }
+}
+
+function animateFloatingButtons(){
+  floatingButtons.forEach(btnData=>{
+    let btn = btnData.el;
+    let left = parseFloat(btn.style.left);
+    let top = parseFloat(btn.style.top);
+    left += btnData.dx;
+    top += btnData.dy;
+
+    if(left < 0 || left > 80) btnData.dx *= -1;
+    if(top < 0 || top > 60) btnData.dy *= -1;
+
+    btn.style.left = left + "vw";
+    btn.style.top = top + "vh";
+  });
+  requestAnimationFrame(animateFloatingButtons);
+}
+requestAnimationFrame(animateFloatingButtons);
+
+function chooseOption(option){
+  document.getElementById("finalMessage").innerHTML="You chose: "+option+"<br>Jinni ❤️ I Love You Forever — Your Chanduu";
+  createHeart();
+}
+</script>
+</body>
+</html>
